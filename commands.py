@@ -1,6 +1,7 @@
 import csv
 import os
 
+# Folder path, contacts.csv is added to path to verify if it exist or not for the add() method.
 PATH = os.path.join(os.path.dirname(__file__), 'contacts.csv')
 
 
@@ -18,20 +19,25 @@ class Commands:
             with open("contacts.csv", "w", newline="") as file:
                 csv_header = csv.DictWriter(file, fieldnames=headers)
                 csv_header.writeheader()
+        # if the .csv file already exists, it will just open it and append the new infos for the contact.
         with open("contacts.csv", "a", newline="") as file:
             csvfile_writer = csv.writer(file)
             csvfile_writer.writerow(infos)
 
     @staticmethod
     def display() -> None:
-        with open("contacts.csv", "r", newline="") as file:
-            file_reader = csv.DictReader(file)
+        try:  # Check if file exist when the user tries to access it.
+            with open("contacts.csv", "r", newline="") as file:
+                file_reader = csv.DictReader(file)
             for row in file_reader:
                 name, last_name, number, email = row["name"], row[
                     "last name"], row["number"], row["email"]
                 print(
                     f"\n{name} {last_name}\nNumber: {number}\nEmail: {email}")
+        except Exception:  #Exits the command with an informational message.
+            print("Please add a contact to create a contact list.")
 
+    # < Not a command to manage the contact list >
     @staticmethod
     def form() -> list[str]:
         name_ipt = input("Name:\n").capitalize()
