@@ -29,12 +29,12 @@ class Commands:
         try:  # Check if file exist when the user tries to access it.
             with open("contacts.csv", "r", newline="") as file:
                 file_reader = csv.DictReader(file)
-            for row in file_reader:
-                name, last_name, number, email = row["name"], row[
-                    "last name"], row["number"], row["email"]
-                print(
-                    f"\n{name} {last_name}\nNumber: {number}\nEmail: {email}")
-        except Exception:  #Exits the command with an informational message.
+                for row in file_reader:
+                        name, last_name, number, email = row["name"], row[
+                            "last name"], row["number"], row["email"]
+                        print(
+                            f"\n{name} {last_name}\nNumber: {number}\nEmail: {email}")
+        except Exception:  #Exits the command with an informational message (Error: FileNotFoundError, ).
             print("Please add a contact to create a contact list.")
 
     # < Not a command to manage the contact list >
