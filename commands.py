@@ -1,6 +1,7 @@
 import csv
 import os
 import time
+import sys
 
 # Folder path, contacts.csv is added to path to verify if it exist or not for the add() method.
 PATH = os.path.join(os.path.dirname(__file__), 'contacts.csv')
@@ -37,7 +38,7 @@ class Commands:
                         f"\n{name} {last_name}\nNumber: {number}\nEmail: {email}"
                     )
                     time.sleep(0.4)
-        except Exception:  #Exits the command with an informational message (Error: FileNotFoundError, ).
+        except Exception:  #Exits the command with an informational message (Error: FileNotFoundError).
             print("Please add a contact to create a contact list.")
 
     @staticmethod
@@ -58,6 +59,11 @@ class Commands:
 
     def remove():
         ...
+
+    @staticmethod
+    def exit():
+        print("Exiting app.")
+        sys.exit()
 
     # < Not a command to manage the contact list >
     @staticmethod
