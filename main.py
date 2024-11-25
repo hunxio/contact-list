@@ -33,7 +33,7 @@ def main():
             ...
         elif user_option == "6":
             #exit program
-            ...
+            Commands.exit()
         else:
             print("Option not available.")
         time.sleep(1)
