@@ -11,7 +11,7 @@ class Commands:
 
     def __init__(self, path: str = PATH):
         self.path = path
-
+    #TODO: If the file exists but there is no header, it needs to be added.
     def add(self, contact) -> None:
         infos = [
             contact.name, contact.last_name, contact.number, contact.email
@@ -25,6 +25,7 @@ class Commands:
         with open("contacts.csv", "a", newline="") as file:
             csvfile_writer = csv.writer(file)
             csvfile_writer.writerow(infos)
+        print("Adding contact...")
 
     @staticmethod
     def display() -> None:
@@ -54,8 +55,31 @@ class Commands:
         time.sleep(0.4)
         return "\nContact not found."
 
-    def edit():
-        ...
+    #TODO: The list does not update, to be fixed tomorrow (in progress)
+    def edit() -> str:
+        contact_name = input("\nInsert contact's name: ").lower()
+        with open("contacts.csv", "r") as file:
+            file_reader = csv.DictReader(file)
+            udpated_data = []
+            fieldnames = file_reader.fieldnames # store the fieldnames for the header later
+            for row in file_reader:
+                if row["name"].lower() == contact_name:
+                    user_ipt = input("\nWhat do you want to edit?\n1) Number\n2) Email\n")
+                    if user_ipt == "1":
+                        new_number = input("What will the new number be?\n")
+                        row["number"] == new_number
+                    elif user_ipt == "2":
+                        new_email = input("What will the new email be?\n")
+                        row["email"] == new_email
+                    else:
+                        return "Option not available.\n"
+        with open("contacts.csv", "w") as new_modified_file:
+            file_writer = csv.DictWriter(new_modified_file, fieldnames=fieldnames)
+            file_writer.writeheader() # add the header again
+            file_writer.writerows(rows) #add the now update rows 
+        time.sleep(0.4)
+        return f"\nNo contact found with the name {contact_name.capitalize()}."
+
 
     def remove():
         ...
