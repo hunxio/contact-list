@@ -27,7 +27,7 @@ def main():
             print(Commands().search())
         elif user_option == "4":
             # edit()
-            ...
+            print(Commands.edit())
         elif user_option == "5":
             #remove()
             ...
