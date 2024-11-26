@@ -62,6 +62,7 @@ class Commands:
     def edit() -> str:
         contact_name = input("\nInsert contact's name: ").lower()
         data = []  # it will store the old data
+        name_check = False
         with open("contacts.csv", "r") as file:
             file_reader = csv.DictReader(file)
             fieldnames = (
@@ -73,6 +74,7 @@ class Commands:
             for row in data:
                 # it searches for the name, the value name will then store the name of the contact we want to change the infos
                 if row["name"].lower() == contact_name:
+                    name_check = True
                     user_ipt = input(
                         "\nWhat do you want to edit?\n1) Number\n2) Email\n"
                     )
@@ -86,12 +88,13 @@ class Commands:
                         break
                     else:
                         return "Option not available.\n"
-
-        with open("contacts.csv", "w", newline="") as new_modified_file:
-            file_writer = csv.DictWriter(new_modified_file, fieldnames=fieldnames)
-            file_writer.writeheader()  # adds the header
-            file_writer.writerows(data)  # adds the rows
-            return f"Updated informations for {contact_name.capitalize()}"
+                        
+        if name_check:
+            with open("contacts.csv", "w", newline="") as new_modified_file:
+                file_writer = csv.DictWriter(new_modified_file, fieldnames=fieldnames)
+                file_writer.writeheader()  # adds the header
+                file_writer.writerows(data)  # adds the rows
+                return f"Updated informations for {contact_name.capitalize()}"
 
         time.sleep(0.2)
         return f"\nNo contact found with the name {contact_name.capitalize()}."
