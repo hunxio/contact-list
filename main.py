@@ -30,7 +30,7 @@ def main():
             print(Commands.edit())
         elif user_option == "5":
             #remove()
-            ...
+            print(Commands.remove())
         elif user_option == "6":
             #exit program
             Commands.exit()
