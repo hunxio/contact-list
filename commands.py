@@ -13,7 +13,9 @@ class Commands:
         self.path = path
 
     def add(self, contact) -> None:
-        infos = [contact.name, contact.last_name, contact.number, contact.email]
+        infos = [
+            contact.name, contact.last_name, contact.number, contact.email
+        ]
         if not os.path.isfile(self.path):
             headers = ["name", "last name", "number", "email"]
             with open("contacts.csv", "w", newline="") as file:
@@ -48,36 +50,33 @@ class Commands:
     @staticmethod
     def search() -> str:
         contact_name_ipt = input(
-            "\nEnter the name of the contact you are looking for:\n"
-        ).lower()
+            "\nEnter the name of the contact you are looking for:\n").capitalize()
         with open("contacts.csv", "r") as file:
             file_reader = csv.DictReader(file)
             for row in file_reader:
-                if row["name"].lower() == contact_name_ipt:
+                if row["name"] == contact_name_ipt:
                     time.sleep(0.4)
-                    return f"\nContact details for {contact_name_ipt.capitalize()}:\nLast Name: {row['last name']}\nNumber: {row['number']}\nEmail: {row['email']}"
+                    return f"\nContact details for {contact_name_ipt}:\nLast Name: {row['last name']}\nNumber: {row['number']}\nEmail: {row['email']}"
         time.sleep(0.4)
         return "\nContact not found."
 
     def edit() -> str:
-        contact_name = input("\nInsert contact's name: ").lower()
+        contact_name = input("\nInsert contact's name: ").capitalize()
         data = []  # it will store the old data
         name_check = False
         with open("contacts.csv", "r") as file:
             file_reader = csv.DictReader(file)
-            fieldnames = (
-                file_reader.fieldnames
-            )  # store the fieldnames for the header later
+            fieldnames = (file_reader.fieldnames
+                          )  # store the fieldnames for the header later
             for row in file_reader:
                 # loops for each row in the csv file and adds it to data
                 data.append(row)
             for row in data:
                 # it searches for the name, the value name will then store the name of the contact we want to change the infos
-                if row["name"].lower() == contact_name:
+                if row["name"] == contact_name:
                     name_check = True
                     user_ipt = input(
-                        "\nWhat do you want to edit?\n1) Number\n2) Email\n"
-                    )
+                        "\nWhat do you want to edit?\n1) Number\n2) Email\n")
                     if user_ipt == "1":
                         new_number = input("What will the new number be?\n")
                         row["number"] = new_number
@@ -88,18 +87,45 @@ class Commands:
                         break
                     else:
                         return "Option not available.\n"
-                        
+
         if name_check:
             with open("contacts.csv", "w", newline="") as new_modified_file:
-                file_writer = csv.DictWriter(new_modified_file, fieldnames=fieldnames)
+                file_writer = csv.DictWriter(new_modified_file,
+                                             fieldnames=fieldnames)
                 file_writer.writeheader()  # adds the header
                 file_writer.writerows(data)  # adds the rows
-                return f"Updated informations for {contact_name.capitalize()}"
+                return f"Updated informations for {contact_name}."
+
+        time.sleep(0.4)
+        return f"\nNo contact found named {contact_name}."
+
+    def remove() -> str:
+        contact_name = input("Insert contact's name: ").capitalize()
+        data = [
+        ]  # contacts that are not going to be removed will be appended here
+        name_check = False
+        with open("contacts.csv", "r") as file:
+            file_reader = csv.DictReader(file)
+            fieldnames = file_reader.fieldnames  # stores the header in fieldnames
+            for contact in file_reader:
+                if not contact_name == contact["name"]:
+                    data.append(
+                        contact
+                    )  # it won't append contact's data where the name matches with the input
+                else:
+                    name_check = True  # validate the user's name
+
+        if name_check:
+            with open("contacts.csv", "w", newline="") as new_modified_file:
+                file_writer = csv.DictWriter(new_modified_file,
+                                             fieldnames=fieldnames)
+                file_writer.writeheader()  # writes the header
+                file_writer.writerows(data)  # writes the new data
+                return f"Contact list updated, {contact_name.capitalize()}'s contact removed."
 
         time.sleep(0.2)
-        return f"\nNo contact found with the name {contact_name.capitalize()}."
+        return f"No contact found named {contact_name.capitalize()}."
 
-    def remove(): ...
 
     @staticmethod
     def exit():
